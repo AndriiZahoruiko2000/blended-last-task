@@ -9,6 +9,8 @@ import {
   createModalByProduct,
   createTemplateCategories,
   createTemplateProducts,
+  updateCartBtnText,
+  updateWishlistBtnText,
 } from './render-function';
 
 //!================================================
@@ -48,4 +50,11 @@ export const openModal = async e => {
   refs.divModalProduct.innerHTML = markupModalContent;
 
   refs.divModal.classList.add('modal--is-open');
+  updateCartBtnText(itemId);
+  updateWishlistBtnText(itemId);
+};
+
+//!================================================
+export const closeModal = e => {
+  refs.divModal.classList.remove('modal--is-open');
 };

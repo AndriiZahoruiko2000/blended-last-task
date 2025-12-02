@@ -1,16 +1,16 @@
-import { handleCategoryClick, initialHome, openModal } from './js/handlers';
-import { getProductById } from './js/products-api';
+import {
+  handleAddToCartClick,
+  handleAddToWishlist,
+  handleBookClick,
+  handleCategoryClick,
+  handleDomLoaded,
+} from './js/handlers';
 import { refs } from './js/refs';
-//!================================================
-import './js/modal.js';
-import { updateHeaderCounter } from './js/render-function.js';
+import { updateHeaderCounter } from './js/render-function';
 
-//!================================================
-//Логіка сторінки Home
-document.addEventListener('DOMContentLoaded', initialHome);
-
-refs.categoryList.addEventListener('click', handleCategoryClick);
-
-refs.productsList.addEventListener('click', openModal);
-
-updateHeaderCounter();
+document.addEventListener('DOMContentLoaded', handleDomLoaded);
+refs.categories.addEventListener('click', handleCategoryClick);
+refs.books.addEventListener('click', handleBookClick);
+refs.addToCartBtn.addEventListener('click', handleAddToCartClick);
+refs.addToWishlistBtn.addEventListener('click', handleAddToWishlist);
+document.addEventListener('DOMContentLoaded', updateHeaderCounter);

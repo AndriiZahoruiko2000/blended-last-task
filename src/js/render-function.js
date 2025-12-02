@@ -5,7 +5,7 @@ import { refs } from './refs';
 //!================================================
 export function createTemplateCategory(category) {
   return `<li class="categories__item">
-   <button class="categories__btn" type="button">${category}</button>
+   <button class="categories__btn" type="button">${category.list_name}</button>
  </li>
 `;
 }
@@ -16,54 +16,65 @@ export function createTemplateCategories(categories) {
 
 //!================================================
 
-export function createTemplateProduct(product) {
-  return `<li class="products__item" data-id="${product.id}">
-    <img class="products__image" src="${product.thumbnail}" alt=""/>
-    <p class="products__title">${product.title}</p>
-    <p class="products__brand">${product.brand}<span class="products__brand--bold">Brand:</span></p>
-    <p class="products__category">Category:${product.category} </p>
-    <p class="products__price">Price: ${product.price}$</p>
+export function createTemplateBook(book) {
+  return `<li class="books__item" data-id="${book._id}">
+    <img class="books__image" src="${book.book_image}" alt=""/>
+    <p class="books__title">${book.title}</p>
+    <p class="books__brand">${book.author}<span class="books__brand--bold">Brand:</span></p>
+    <p class="books__category">Category:${book.list_name} </p>
+    <p class="books__price">Price: ${book.price}$</p>
  </li>
 `;
 }
 
-export function createTemplateProducts(products) {
-  return products.map(createTemplateProduct).join('');
+export function createTemplateBooks(books) {
+  return books.map(createTemplateBook).join('');
 }
 
 //!================================================
 
-export function createModalByProduct(product) {
-  return `<img class="modal-product__img" src="${product.images[0]}" alt="" />
-      <div class="modal-product__content">
-        <p class="modal-product__title">${product.title}</p>
-        <ul class="modal-product__tags">${product.tags}</ul>
-        <p class="modal-product__description">${product.description}</p>
-        <p class="modal-product__shipping-information">Shipping:${product.shippingInformation}</p>
-        <p class="modal-product__return-policy">Return Policy:${product.returnPolicy}</p>
-        <p class="modal-product__price">Price: ${product.price}</p>
-        <button class="modal-product__buy-btn" type="button" data-id="${product.id}">Buy</button>
+export function createModalByBook(book) {
+  return `<img class="modal-book__img" src="${book.book_image}" alt="" />
+      <div class="modal-book__content">
+        <p class="modal-book__title">${book.title}</p>
+        <ul class="modal-book__tags">${(book.buy_links || [])
+          .map(el => {
+            return `<li><a href="${el.url}">${el.name}</a></li>`;
+          })
+          .join('')}</ul>
+        <p class="modal-book__description">${book.description}</p>
+        <p class="modal-book__shipping-information">Shipping:${
+          book.shippingInformation
+        }</p>
+        <p class="modal-book__return-policy">Return Policy:${
+          book.contributors
+        }</p>
+        <p class="modal-book__price">Price: ${book.price}</p>
+        <button class="modal-book__buy-btn" type="button" data-id="${
+          book._id
+        }">Buy</button>
       </div>
 `;
 }
 //!================================================
-export function renderCartInfo(products) {
-  const productLength = products.length;
+export function renderCartInfo(books) {
+  const bookLength = books.length;
   let totalPrice = 0;
 
-  for (const product of products) {
-    totalPrice += product.price;
+  for (const book of books) {
+    totalPrice += +book.price;
+    console.log(book);
   }
 
-  refs.cartInfo.querySelector('[data-count]').textContent = productLength;
-  refs.cartInfo.querySelector('[data-price]').textContent =
-    totalPrice.toFixed(2) + '$';
+  refs.cartCount.textContent = bookLength;
+  refs.cartTotalPrice.textContent = totalPrice.toFixed(2) + '$';
 }
 
 //!================================================
 
 export const updateCartBtnText = id => {
   let cart = loadFromLS(LOCAL_STORAGE_KEY, []);
+
   if (cart.includes(id)) {
     refs.addToCartBtn.textContent = 'Remove from Cart';
   } else {
@@ -74,17 +85,20 @@ export const updateCartBtnText = id => {
 export const updateWishlistBtnText = id => {
   let wishlist = loadFromLS(LOCAL_STORAGE_WISHLIST_KEY, []);
   if (wishlist.includes(id)) {
-    refs.addToWishlist.textContent = 'Remove from Wishlist';
+    refs.addToWishlistBtn.textContent = 'Remove from Wishlist';
   } else {
-    refs.addToWishlist.textContent = 'Add to Wishlist';
+    refs.addToWishlistBtn.textContent = 'Add to Wishlist';
   }
 };
 //!================================================
 
 export const updateHeaderCounter = () => {
   console.log(refs);
-  const cart = loadFromLS(LOCAL_STORAGE_KEY);
-  const wishlist = loadFromLS(LOCAL_STORAGE_WISHLIST_KEY);
+  const cart = loadFromLS(LOCAL_STORAGE_KEY, []);
+  const wishlist = loadFromLS(LOCAL_STORAGE_WISHLIST_KEY, []);
+  console.log(cart);
+  console.log(wishlist);
   refs.headerCartCount.textContent = cart.length;
   refs.headerWishlistCount.textContent = wishlist.length;
 };
+//!================================================

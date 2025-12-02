@@ -1,4 +1,4 @@
-.product-page {
+.book-page {
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 2rem;
